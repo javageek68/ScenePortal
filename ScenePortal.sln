@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScenePortal.Plugins", "ScenePortal.Plugins.csproj", "{8C547E18-28B0-4030-D58E-738AD304D2CD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScenePortal", "ScenePortal.csproj", "{27C5BA49-4FD1-621E-3C0B-CA1904790CBB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScenePortal.Editor.Plugins", "ScenePortal.Editor.Plugins.csproj", "{AB34BBB8-A64B-4181-26C8-060458E906F6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8C547E18-28B0-4030-D58E-738AD304D2CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C547E18-28B0-4030-D58E-738AD304D2CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C547E18-28B0-4030-D58E-738AD304D2CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C547E18-28B0-4030-D58E-738AD304D2CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27C5BA49-4FD1-621E-3C0B-CA1904790CBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27C5BA49-4FD1-621E-3C0B-CA1904790CBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27C5BA49-4FD1-621E-3C0B-CA1904790CBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27C5BA49-4FD1-621E-3C0B-CA1904790CBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB34BBB8-A64B-4181-26C8-060458E906F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB34BBB8-A64B-4181-26C8-060458E906F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB34BBB8-A64B-4181-26C8-060458E906F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB34BBB8-A64B-4181-26C8-060458E906F6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

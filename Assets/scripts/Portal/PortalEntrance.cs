@@ -13,6 +13,7 @@ public class PortalEntrance : MonoBehaviour {
     private Camera exitCamera;
     public float baseZoom = 120f;
     public float zoomFactor = 1f;
+    private SceneContainer sceneContainer;
 
 
     /// <summary>
@@ -20,7 +21,9 @@ public class PortalEntrance : MonoBehaviour {
     /// </summary>
     void Start () {
         PortalController.instance.RegisterEntrance(this);
-	}
+
+    }
+
 
     private void Update()
     {

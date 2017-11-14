@@ -10,6 +10,8 @@ public class PortalController : MonoBehaviour {
     public Vector3 PlayerLevel = Vector3.zero;
     public string strStartScene = "Main";
 
+    public SceneContainer currentScene;
+
     private PortalPlayer portalPlayer = null;
     private Dictionary<string, PortalEntrance> dctEntrances = new Dictionary<string, PortalEntrance>();
     private Dictionary<string, PortalExit> dctExits = new Dictionary<string, PortalExit>();
@@ -21,7 +23,7 @@ public class PortalController : MonoBehaviour {
     {
         PortalController.instance = this;
         //load the starting scene
-        SceneManager.LoadScene(strStartScene, LoadSceneMode.Additive);
+        //SceneManager.LoadScene(strStartScene, LoadSceneMode.Additive);
     }
 
     // Use this for initialization
@@ -33,7 +35,7 @@ public class PortalController : MonoBehaviour {
 	void Update () {
         if (blnPortalScenesLoaded == false)
         {
-            LoadPortalScenes();
+            //LoadPortalScenes();
             blnPortalScenesLoaded = true;
         }
 	}
@@ -41,6 +43,7 @@ public class PortalController : MonoBehaviour {
     public void PlayerEnteredPortal(PortalEntrance entrance, string strCurrentScene)
     {
         Debug.Log("player entered portal.  Current scene " + strCurrentScene);
+        //this.currentScene = entrance.exitSceneContainer;
         //move the next scene to the player level
         entrance.exitSceneContainer.transform.position = PlayerLevel;
 
@@ -88,6 +91,15 @@ public class PortalController : MonoBehaviour {
         //match each one with its exit and the exit's scene container
         //get the portal exit camera's target texture
         //assign the target textture of each camera to the portal entrance
+        foreach (KeyValuePair<string, PortalEntrance> kvpEntrance in dctEntrances)
+        {
+            string strTargetScene = kvpEntrance.Value.TargetSceneName;
+            if (dctExits.ContainsKey(strTargetScene))
+            {
+                PortalExit exit = dctExits[strTargetScene];
+
+            }
+        }
     }
 
     public void RegisterPortalPlayer(PortalPlayer player)

@@ -1,0 +1,48 @@
+﻿
+Initial load
+	Load start scene
+
+	Set Current Scene
+
+	loop through entrance portals
+		if portal scene isn't loaded 
+			load scene
+		end if
+	end loop
+
+
+
+Enter Portal
+	Set Current Scene
+
+	if old scene is a portal destination in the new scene
+		Move old scene to an empty slot
+	end if
+	
+	loop through list of loaded scenes
+		Unload old scene
+	end loop
+
+	loop through entrance portals
+		if portal scene isn't loaded 
+			load scene
+		end if
+	end loop
+			
+
+Set Current Scene
+	Set as current scene
+	Move new scene to player level
+	Assign current scene's skybox to player camera
+
+
+Load Scene
+	Place scene in a slot
+	Assign render texture to portal
+
+remove null objects in dictionaries
+	for each item 
+		if null then remove
+	next
+
+

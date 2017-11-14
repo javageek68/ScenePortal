@@ -4,11 +4,6 @@ using UnityEngine;
 
 public class SceneContainer : MonoBehaviour {
 
-    public enum SceneMode
-    {
-        CurrentScene,
-        NextScene
-    }
     public string SceneName;
 
     private void Awake()
