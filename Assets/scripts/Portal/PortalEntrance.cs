@@ -24,7 +24,7 @@ public class PortalEntrance : MonoBehaviour {
     private void OnTriggerEnter(Collider other)
     {
         //Entered the portal
-        PortalController.instance.PlayerEnteredPortal(this, gameObject.scene.name);
+        PortalController.instance.PlayerEnteredPortal(this, gameObject.scene.name, portalData.ExitSceneName);
     }
 
     public void AssignPortalSurfaceTexture()

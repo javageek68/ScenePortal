@@ -10,7 +10,7 @@ public class PortalExit : MonoBehaviour {
 
     private void Update()
     {
-        portalExitCamera.transform.forward = portalData.ExitCameraLookDirection;
+        if (portalData.ExitCameraLookDirection != Vector3.zero) portalExitCamera.transform.forward = portalData.ExitCameraLookDirection;
         portalExitCamera.fieldOfView = portalData.ExitCameraFieldOfView;
     }
 }
