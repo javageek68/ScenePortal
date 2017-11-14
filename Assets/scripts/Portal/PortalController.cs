@@ -45,7 +45,7 @@ public class PortalController : MonoBehaviour {
         Debug.Log("player entered portal.  Current scene " + strCurrentScene);
         //this.currentScene = entrance.exitSceneContainer;
         //move the next scene to the player level
-        entrance.exitSceneContainer.transform.position = PlayerLevel;
+        //entrance.exitSceneContainer.transform.position = PlayerLevel;
 
         //Does one of the new portals point to the old scene?
         //if so, then move it to an open slot.

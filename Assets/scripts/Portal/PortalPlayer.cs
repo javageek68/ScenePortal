@@ -4,11 +4,18 @@ using UnityEngine;
 
 public class PortalPlayer : MonoBehaviour {
 
+    public PortalPlayerData portalPlayerData;
+
     /// <summary>
     /// 
     /// </summary>
     void Start()
     {
-        PortalController.instance.RegisterPortalPlayer(this);
+
+    }
+
+    private void Update()
+    {
+        portalPlayerData.transform = gameObject.transform;
     }
 }

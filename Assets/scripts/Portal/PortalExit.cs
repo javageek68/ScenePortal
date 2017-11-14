@@ -5,19 +5,12 @@ using UnityEngine;
 public class PortalExit : MonoBehaviour {
 
     public string SceneName;
+    public Camera portalExitCamera;
+    public PortalData portalData;
 
-    /// <summary>
-    /// 
-    /// </summary>
-    private void Awake()
+    private void Update()
     {
-        this.SceneName = gameObject.scene.name;
-    }
-    /// <summary>
-    /// 
-    /// </summary>
-    void Start()
-    {
-        PortalController.instance.RegisterExit(this);
+        portalExitCamera.transform.forward = portalData.ExitCameraLookDirection;
+        portalExitCamera.fieldOfView = portalData.ExitCameraFieldOfView;
     }
 }
