@@ -21,25 +21,41 @@ public class PortalController : MonoBehaviour {
         PortalController.instance = this;
 
         strCurrentScene = strStartScene;
+
+        StartCoroutine(LoadStartScene());
+    }
+
+    IEnumerator LoadStartScene()
+    {
         //load the starting scene
         SceneManager.LoadScene(strCurrentScene, LoadSceneMode.Additive);
 
         Debug.Log("looking at scene");
-        Scene s = SceneManager.GetSceneByName(strStartScene);
-        Debug.Log("scene instance " + s.name);
-        GameObject[] gos = s.GetRootGameObjects();
+        Scene scene = SceneManager.GetSceneByName(strStartScene);
+
+        Debug.Log("scene instance " + scene.name + "  " + scene.isLoaded.ToString());
+
+        while (scene.isLoaded == false)
+        {
+            yield return 0;
+        }
+        GameObject[] gos = scene.GetRootGameObjects();
         foreach (GameObject go in gos)
         {
             Debug.Log("found " + go.name);
+            SceneContainer container = go.GetComponent<SceneContainer>();
+            if (container != null)
+            {
+                lstPortalEntrances = container.GetPortalEntrances();
+                foreach (PortalEntrance entrance in lstPortalEntrances)
+                {
+                    string strPortalExitScene = entrance.portalData.ExitSceneName;
+                    SceneManager.LoadScene(strPortalExitScene, LoadSceneMode.Additive);
+                }
+                break;
+            }
         }
-
-
-        ////get a list of portal entrances for this scene
-        //lstPortalEntrances = GetPortalEntrances(strCurrentScene);
-        //LoadPortalScenes();
-        //PortalPlayer[] plrs = FindObjectsOfType(typeof(PortalPlayer)) as PortalPlayer[];
-        //Debug.Log("found plrs " + plrs.Length);
-
+        yield return 0;
     }
 
     // Use this for initialization
@@ -53,28 +69,29 @@ public class PortalController : MonoBehaviour {
 
     public void PlayerEnteredPortal(PortalEntrance entrance, string strOldScene, string strNewScene)
     {
+
         Debug.Log(string.Format("player entered portal.  old scene {0} new scene {1}", strOldScene, strNewScene));
 
         //change to the new scene
+        //the exit portal is in the new scene
         strCurrentScene = strNewScene;
+        SceneContainer oldScene = GetSceneContainer(strOldScene);
+        SceneContainer newScene = GetSceneContainer(strNewScene);
 
-        //get the scene container for the new scene
-        GameObject newSceneContainer = GetSceneContainer(strNewScene);
+
         //move the new scene to the player level
-        newSceneContainer.transform.position = PlayerLevel;
+        newScene.gameObject.transform.position = PlayerLevel;
 
         //get a list of portal entrances for this scene
-        lstPortalEntrances = GetPortalEntrances(strNewScene);
+        lstPortalEntrances = newScene.GetPortalEntrances();
 
         //check to see if the old scene is a destination of the new scene
         if (SceneIsInPortalList(strOldScene))
         {
             //the scene we are leaving is in the list of the new scene's portals
             //don't bother unloading it
-            //get the scene container for the new scene
-            GameObject oldSceneContainer = GetSceneContainer(strOldScene);
             //move the scene to temp holding
-            oldSceneContainer.transform.position = vctTempLevelArea;
+            oldScene.transform.position = vctTempLevelArea;
         }
         else
         {
@@ -90,42 +107,20 @@ public class PortalController : MonoBehaviour {
         LoadPortalScenes();
     }
 
-
-    /// <summary>
-    /// get all of the portals that are in the scene strSceneName
-    /// </summary>
-    /// <param name="strSceneName"></param>
-    /// <returns></returns>
-    private List<PortalEntrance> GetPortalEntrances(string strSceneName)
+    private SceneContainer GetSceneContainer(string strSceneName)
     {
-        Debug.Log("Entered GetPortalEntrances() - " + strSceneName);
-        List<PortalEntrance> lstEntrances = new List<PortalEntrance>();
-        PortalEntrance[] entrances = FindObjectsOfType(typeof(PortalEntrance)) as PortalEntrance[];
-        Debug.Log("found entrances " + entrances.Length);
-        foreach (PortalEntrance entrance in entrances)
+        SceneContainer container = null;
+        Scene scene = SceneManager.GetSceneByName(strSceneName);
+        GameObject[] gos = scene.GetRootGameObjects();
+        foreach (GameObject go in gos)
         {
-            if (entrance.gameObject.scene.name == strSceneName)
-            {
-                Debug.Log("adding " + entrance.gameObject.name );
-                lstEntrances.Add(entrance);
-            }
+            container = go.GetComponent<SceneContainer>();
+            if (container != null) break;
         }
-        return lstEntrances;
+        return container;
     }
 
-    private GameObject GetSceneContainer(string strSceneName)
-    {
-        GameObject goSceneContainer = null;
-        SceneContainer[] sceneContainers = FindObjectsOfType(typeof(SceneContainer)) as SceneContainer[];
-        foreach (SceneContainer container in sceneContainers)
-        {
-            if (container.gameObject.scene.name == strSceneName)
-            {
-                goSceneContainer = container.gameObject;
-            }
-        }
-        return goSceneContainer;
-    }
+
 
     /// <summary>
     /// Unload any portals that are not pointed to by the current set of portals
@@ -136,7 +131,8 @@ public class PortalController : MonoBehaviour {
         {
             string strTargetScene = SceneManager.GetSceneAt(i).name;
             //if the scene is not in the portal list, unload it
-            if (!SceneIsInPortalList(strTargetScene)) SceneManager.UnloadSceneAsync(strTargetScene);
+            //unless it is the scene the Director is in5
+            if (!SceneIsInPortalList(strTargetScene) && strTargetScene != gameObject.scene.name)  SceneManager.UnloadSceneAsync(strTargetScene);
         }
     }
 
