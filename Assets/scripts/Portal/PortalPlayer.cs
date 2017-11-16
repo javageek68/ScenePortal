@@ -18,4 +18,10 @@ public class PortalPlayer : MonoBehaviour {
     {
         portalPlayerData.transform = gameObject.transform;
     }
+
+    public void ApplySkyboxMaterial(Material newSkybox)
+    {
+        Skybox skybox = gameObject.GetComponentInChildren<Skybox>();
+        skybox.material = newSkybox;
+    }
 }

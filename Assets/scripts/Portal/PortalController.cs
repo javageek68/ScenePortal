@@ -11,7 +11,7 @@ public class PortalController : MonoBehaviour {
     public string strStartScene = "Main";
     public string strCurrentScene;
 
-    private PortalPlayer portalPlayer = null;
+    public PortalPlayer portalPlayer = null;
 
     private List<PortalEntrance> lstPortalEntrances;
     private Vector3 vctTempLevelArea = new Vector3(0, 10000, 0);
@@ -35,26 +35,29 @@ public class PortalController : MonoBehaviour {
 
         Debug.Log("scene instance " + scene.name + "  " + scene.isLoaded.ToString());
 
+        //wait for main scene to finish loading
         while (scene.isLoaded == false)
         {
             yield return 0;
         }
-        GameObject[] gos = scene.GetRootGameObjects();
-        foreach (GameObject go in gos)
+
+        //get the start scene's container
+        SceneContainer container = GetSceneContainer(strStartScene);
+
+        Material skyboxMaterial = container.GetSkyboxMaterial();
+        portalPlayer.ApplySkyboxMaterial(skyboxMaterial);
+
+
+        //get the portals from the start scene's container
+        lstPortalEntrances = container.GetPortalEntrances();
+
+        //load the scenes that the portals point to
+        foreach (PortalEntrance entrance in lstPortalEntrances)
         {
-            Debug.Log("found " + go.name);
-            SceneContainer container = go.GetComponent<SceneContainer>();
-            if (container != null)
-            {
-                lstPortalEntrances = container.GetPortalEntrances();
-                foreach (PortalEntrance entrance in lstPortalEntrances)
-                {
-                    string strPortalExitScene = entrance.portalData.ExitSceneName;
-                    SceneManager.LoadScene(strPortalExitScene, LoadSceneMode.Additive);
-                }
-                break;
-            }
+            string strPortalExitScene = entrance.portalData.ExitSceneName;
+            SceneManager.LoadScene(strPortalExitScene, LoadSceneMode.Additive);
         }
+
         yield return 0;
     }
 
@@ -81,6 +84,10 @@ public class PortalController : MonoBehaviour {
 
         //move the new scene to the player level
         newScene.gameObject.transform.position = PlayerLevel;
+
+        //get the new scene's skybox material and apply it to the player camera
+        Material skyboxMaterial = newScene.GetSkyboxMaterial();
+        portalPlayer.ApplySkyboxMaterial(skyboxMaterial);
 
         //get a list of portal entrances for this scene
         lstPortalEntrances = newScene.GetPortalEntrances();

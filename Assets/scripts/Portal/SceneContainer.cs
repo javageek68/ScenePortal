@@ -38,4 +38,16 @@ public class SceneContainer : MonoBehaviour {
         return lstEntrances;
     }
 
+    public Material GetSkyboxMaterial()
+    {
+        //get the portal exit for this level
+        PortalExit exit = gameObject.GetComponentInChildren<PortalExit>();
+        //the exit camera is a child of the portal exit.  it has a skybox component
+        Skybox skybox = exit.gameObject.GetComponentInChildren<Skybox>();
+        //get the material from the skybox
+        Material skyboxMaterial = skybox.material;
+
+        return skyboxMaterial;
+    }
+
 }
