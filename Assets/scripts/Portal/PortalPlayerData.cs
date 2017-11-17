@@ -7,6 +7,6 @@ using UnityEngine;
 [CreateAssetMenu]
 public class PortalPlayerData : ScriptableObject
 {
-    public Transform transform;
+    public Vector3 playerPosition;
 }
 

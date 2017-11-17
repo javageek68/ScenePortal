@@ -13,7 +13,7 @@ public class PortalEntrance : MonoBehaviour {
     private void Update()
     {
         //give the portal exit camera the same perspective as the player to the entrance
-        Vector3 vctLookDirection = gameObject.transform.position - portalPlayerData.transform.position;
+        Vector3 vctLookDirection = gameObject.transform.position - portalPlayerData.playerPosition;
         portalData.ExitCameraLookDirection = vctLookDirection;
 
         //base the zoom of the exit camera on the distance to the entrance of the portal

@@ -1,15 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class PortalController : MonoBehaviour {
 
     public static PortalController instance = null;
 
+    public Text txtCurrentScene;
     public Vector3 PlayerLevel = Vector3.zero;
     public string strStartScene = "Main";
     public string strCurrentScene;
+    public int intPortalSceneVerticalSpacing = 1000;
 
     public PortalPlayer portalPlayer = null;
 
@@ -68,6 +71,7 @@ public class PortalController : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
+        this.txtCurrentScene.text = strCurrentScene;
     }
 
     public void PlayerEnteredPortal(PortalEntrance entrance, string strOldScene, string strNewScene)
@@ -108,7 +112,7 @@ public class PortalController : MonoBehaviour {
         }
         else
         {
-            Debug.Log(string.Format("the new level DOES NOT contain a portal back to the previous level. unloading level"));
+            Debug.Log(string.Format("the new level DOES NOT contain a portal back to the previous scene {0} . unloading scene", strOldScene));
             //the scene we are leaving is NOT in the list of the new scene's portals
             //unload the current scene
             SceneManager.UnloadSceneAsync(strOldScene);
@@ -121,9 +125,13 @@ public class PortalController : MonoBehaviour {
         Debug.Log("calling LoadPortalScenes()");
         //load scenes that are contained in the list that are not currently loaded
         LoadPortalScenes();
+
+        //Move each portal to its vertical slot
+        PlacePortalScenesInSlots();
+
     }
 
-    private SceneContainer GetSceneContainer(string strSceneName)
+private SceneContainer GetSceneContainer(string strSceneName)
     {
         SceneContainer container = null;
         Scene scene = SceneManager.GetSceneByName(strSceneName);
@@ -220,6 +228,27 @@ public class PortalController : MonoBehaviour {
         }
         Debug.Log("leaving LoadPortalScenes()");
     }
-    
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private void PlacePortalScenesInSlots()
+    {
+        Debug.Log("entered PlacePortalScenesInSlots()");
+        //iterate through the portals in this scene 
+        for (int i = 0; i < lstPortalEntrances.Count; i++)
+        {
+            PortalEntrance entrance = lstPortalEntrances[i];
+           //get a ref to the actual scene container
+           SceneContainer sceneContaier = GetSceneContainer(entrance.portalData.ExitSceneName);
+
+            int intVerticalLevel = intPortalSceneVerticalSpacing * (i+1) * -1;
+            Debug.Log(string.Format("Moving {0} to level {1}", entrance.portalData.ExitSceneName, intVerticalLevel));
+            sceneContaier.gameObject.transform.position = new Vector3(0, intVerticalLevel, 0);
+        }
+        Debug.Log("leaving PlacePortalScenesInSlots()");
+
+    }
+
 
 }

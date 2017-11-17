@@ -16,7 +16,7 @@ public class PortalPlayer : MonoBehaviour {
 
     private void Update()
     {
-        portalPlayerData.transform = gameObject.transform;
+        portalPlayerData.playerPosition = gameObject.transform.position;
     }
 
     public void ApplySkyboxMaterial(Material newSkybox)
