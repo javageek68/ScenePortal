@@ -99,6 +99,10 @@ public class PortalController : MonoBehaviour {
         //move the new scene to the player level
         newScene.gameObject.transform.position = PlayerLevel;
 
+        //move the player to the portal exit position
+        //PortalExit portalExit = newScene.gameObject.GetComponentInChildren<PortalExit>();
+        //portalPlayer.transform.position = portalExit.gameObject.transform.position;
+
         //get the new scene's skybox material and apply it to the player camera
         Material skyboxMaterial = newScene.GetSkyboxMaterial();
         portalPlayer.ApplySkyboxMaterial(skyboxMaterial);
