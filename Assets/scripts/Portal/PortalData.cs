@@ -10,5 +10,6 @@ public class PortalData : ScriptableObject
     public Vector3 ExitCameraLookDirection;
     public float ExitCameraFieldOfView;
     public string ExitSceneName;
+    public RenderTexture renderTexture;
 }
 

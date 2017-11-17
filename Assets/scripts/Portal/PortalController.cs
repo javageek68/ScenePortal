@@ -49,7 +49,7 @@ public class PortalController : MonoBehaviour {
 
 
         //get the portals from the start scene's container
-        lstPortalEntrances = container.GetPortalEntrances();
+        lstPortalEntrances = container.GetPortalEntrances(strStartScene);
 
         //load the scenes that the portals point to
         foreach (PortalEntrance entrance in lstPortalEntrances)
@@ -81,20 +81,26 @@ public class PortalController : MonoBehaviour {
         SceneContainer oldScene = GetSceneContainer(strOldScene);
         SceneContainer newScene = GetSceneContainer(strNewScene);
 
+        Debug.Log(string.Format("old scene container {0} new scene container {1}", oldScene.gameObject.scene.name, newScene.gameObject.scene.name));
 
+
+        Debug.Log(string.Format("placing new scene {0} at player level {1}", newScene.gameObject.scene.name, PlayerLevel));
         //move the new scene to the player level
         newScene.gameObject.transform.position = PlayerLevel;
 
         //get the new scene's skybox material and apply it to the player camera
         Material skyboxMaterial = newScene.GetSkyboxMaterial();
         portalPlayer.ApplySkyboxMaterial(skyboxMaterial);
+        Debug.Log(string.Format("set skybox material to {0}", skyboxMaterial.name));
 
         //get a list of portal entrances for this scene
-        lstPortalEntrances = newScene.GetPortalEntrances();
+        lstPortalEntrances = newScene.GetPortalEntrances(strNewScene);
+        Debug.Log(string.Format("found {0} portal entrances in the new level", lstPortalEntrances.Count));
 
         //check to see if the old scene is a destination of the new scene
         if (SceneIsInPortalList(strOldScene))
         {
+            Debug.Log(string.Format("the new level contains a portal back to the previous level. moving it to {0}", vctTempLevelArea));
             //the scene we are leaving is in the list of the new scene's portals
             //don't bother unloading it
             //move the scene to temp holding
@@ -102,14 +108,17 @@ public class PortalController : MonoBehaviour {
         }
         else
         {
+            Debug.Log(string.Format("the new level DOES NOT contain a portal back to the previous level. unloading level"));
             //the scene we are leaving is NOT in the list of the new scene's portals
             //unload the current scene
             SceneManager.UnloadSceneAsync(strOldScene);
         }
 
+        Debug.Log("calling UnloadPortalScenes()");
         //unload scenes not contained in the list
-        UnloadPortalScenes();
+        UnloadPortalScenes(strNewScene);
 
+        Debug.Log("calling LoadPortalScenes()");
         //load scenes that are contained in the list that are not currently loaded
         LoadPortalScenes();
     }
@@ -132,14 +141,28 @@ public class PortalController : MonoBehaviour {
     /// <summary>
     /// Unload any portals that are not pointed to by the current set of portals
     /// </summary>
-    private void UnloadPortalScenes()
+    private void UnloadPortalScenes(string strCurrScene)
     {
+        Debug.Log("entered UnloadPortalScenes()");
+
+        string strDirectorScene = gameObject.scene.name.Trim().ToLower();
+        strCurrScene = strCurrScene.Trim().ToLower();
+
         for (int i = SceneManager.sceneCount-1; i >= 0; i--)
         {
-            string strTargetScene = SceneManager.GetSceneAt(i).name;
+            string strTargetScene = SceneManager.GetSceneAt(i).name.Trim().ToLower();
+            Debug.Log("checking " + strTargetScene);
             //if the scene is not in the portal list, unload it
             //unless it is the scene the Director is in5
-            if (!SceneIsInPortalList(strTargetScene) && strTargetScene != gameObject.scene.name)  SceneManager.UnloadSceneAsync(strTargetScene);
+            if (strTargetScene != strDirectorScene &&
+                strTargetScene != strCurrScene && 
+                !SceneIsInPortalList(strTargetScene))
+            {
+                Debug.Log("Unloading " + strTargetScene);
+                SceneManager.UnloadSceneAsync(strTargetScene);
+            }
+
+            Debug.Log("leaving UnloadPortalScenes()");
         }
     }
 
@@ -150,15 +173,20 @@ public class PortalController : MonoBehaviour {
     /// <returns></returns>
     private bool SceneIsInPortalList(string strTargetScene)
     {
+        strTargetScene = strTargetScene.Trim().ToLower();
+        Debug.Log("entered SceneIsInPortalList() " + strTargetScene);
         bool blnFound = false;
         foreach (PortalEntrance entrance in lstPortalEntrances)
         {
-            if (strTargetScene == entrance.portalData.ExitSceneName)
+            Debug.Log(string.Format("checking {0} against {1}", strTargetScene, entrance.portalData.ExitSceneName));
+            if (strTargetScene == entrance.portalData.ExitSceneName.Trim().ToLower())
             {
+                Debug.Log("We have a match");
                 blnFound = true;
                 break;
             }
         }
+        Debug.Log("leaving SceneIsInPortalList()");
         return blnFound;
     }
 
@@ -167,22 +195,30 @@ public class PortalController : MonoBehaviour {
     /// </summary>
     private void LoadPortalScenes()
     {
+        Debug.Log("entered LoadPortalScenes()");
         //iterate through the portals in this scene and load the corresponding scenes
         foreach (PortalEntrance  entrance in lstPortalEntrances)
         {
-            string strTargetScene = entrance.portalData.ExitSceneName;
+            string strTargetScene = entrance.portalData.ExitSceneName.Trim().ToLower();
+            Debug.Log("checking " + strTargetScene);
             bool blnAlreadyLoaded = false;
             for (int i = 0; i < SceneManager.sceneCount; i++)
             {
-                if (SceneManager.GetSceneAt(i).name == strTargetScene)
+                if (SceneManager.GetSceneAt(i).name.Trim().ToLower() == strTargetScene)
                 {
                     blnAlreadyLoaded = true;
+                    Debug.Log(string.Format("{0} is already loaded", strTargetScene));
                     break;
                 }
             }
             //load the scene if we don't already have it
-            if (!blnAlreadyLoaded) SceneManager.LoadScene(strTargetScene, LoadSceneMode.Additive);
+            if (!blnAlreadyLoaded)
+            {
+                Debug.Log("loading " + strTargetScene);
+                SceneManager.LoadScene(strTargetScene, LoadSceneMode.Additive);
+            }
         }
+        Debug.Log("leaving LoadPortalScenes()");
     }
     
 

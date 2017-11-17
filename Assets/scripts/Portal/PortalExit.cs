@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PortalExit : MonoBehaviour {
 
-    public string SceneName;
     public Camera portalExitCamera;
     public PortalData portalData;
 

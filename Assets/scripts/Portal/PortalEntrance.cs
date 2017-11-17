@@ -5,7 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class PortalEntrance : MonoBehaviour {
 
-    public string TargetSceneName;
     public PortalPlayerData portalPlayerData;
     public PortalData portalData;
     public float baseZoom = 120f;

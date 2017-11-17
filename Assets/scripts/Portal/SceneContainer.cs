@@ -24,7 +24,7 @@ public class SceneContainer : MonoBehaviour {
 		
 	}
 
-    public List<PortalEntrance> GetPortalEntrances()
+    public List<PortalEntrance> GetPortalEntrances(string strSceneName)
     {
         Debug.Log("Entered GetPortalEntrances() - ");
         List<PortalEntrance> lstEntrances = new List<PortalEntrance>();
@@ -32,8 +32,11 @@ public class SceneContainer : MonoBehaviour {
         Debug.Log("found entrances " + entrances.Length);
         foreach (PortalEntrance entrance in entrances)
         {
-            Debug.Log("adding " + entrance.gameObject.name);
-            lstEntrances.Add(entrance);
+            if (entrance.gameObject.scene.name == strSceneName)
+            {
+                Debug.Log(string.Format("adding {0} from scene {1} ", entrance.gameObject.name, entrance.gameObject.scene.name));
+                lstEntrances.Add(entrance);
+            }
         }
         return lstEntrances;
     }
