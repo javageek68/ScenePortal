@@ -7,8 +7,14 @@ public class PortalEntrance : MonoBehaviour {
 
     public PortalPlayerData portalPlayerData;
     public PortalData portalData;
+    public TextMesh textMesh; 
     public float baseZoom = 120f;
     public float zoomFactor = 1f;
+
+    private void Start()
+    {
+        textMesh.text = portalData.ExitSceneName;
+    }
 
     private void Update()
     {
