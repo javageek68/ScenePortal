@@ -23,7 +23,7 @@ public class PortalController : MonoBehaviour {
     {
         PortalController.instance = this;
 
-        strCurrentScene = strStartScene;
+        SetScene(strStartScene);
 
         StartCoroutine(LoadStartScene());
     }
@@ -71,7 +71,14 @@ public class PortalController : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        this.txtCurrentScene.text = strCurrentScene;
+
+    }
+
+    private void SetScene(string strScene)
+    {
+        this.strCurrentScene = strScene;
+        this.txtCurrentScene.text = strScene;
+        portalPlayer.SetScene(strScene);
     }
 
     public void PlayerEnteredPortal(PortalEntrance entrance, string strOldScene, string strNewScene)
@@ -81,7 +88,7 @@ public class PortalController : MonoBehaviour {
 
         //change to the new scene
         //the exit portal is in the new scene
-        strCurrentScene = strNewScene;
+        SetScene(strNewScene);
         SceneContainer oldScene = GetSceneContainer(strOldScene);
         SceneContainer newScene = GetSceneContainer(strNewScene);
 

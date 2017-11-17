@@ -19,6 +19,11 @@ public class PortalPlayer : MonoBehaviour {
         portalPlayerData.playerPosition = gameObject.transform.position;
     }
 
+    public void SetScene(string strCurrentScene)
+    {
+        portalPlayerData.CurrentScene = strCurrentScene;
+    }
+
     public void ApplySkyboxMaterial(Material newSkybox)
     {
         Skybox skybox = gameObject.GetComponentInChildren<Skybox>();

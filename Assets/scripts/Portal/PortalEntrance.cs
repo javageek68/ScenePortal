@@ -18,6 +18,9 @@ public class PortalEntrance : MonoBehaviour {
 
     private void Update()
     {
+        //make sure only the portal entrances in the scene with the player are running
+        if (portalPlayerData.CurrentScene != gameObject.scene.name) return;
+
         //give the portal exit camera the same perspective as the player to the entrance
         Vector3 vctLookDirection = gameObject.transform.position - portalPlayerData.playerPosition;
         portalData.ExitCameraLookDirection = vctLookDirection;

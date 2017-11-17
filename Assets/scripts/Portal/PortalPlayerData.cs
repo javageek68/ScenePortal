@@ -8,5 +8,6 @@ using UnityEngine;
 public class PortalPlayerData : ScriptableObject
 {
     public Vector3 playerPosition;
+    public string CurrentScene;
 }
 
