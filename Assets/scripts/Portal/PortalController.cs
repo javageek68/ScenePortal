@@ -212,8 +212,9 @@ private SceneContainer GetSceneContainer(string strSceneName)
     /// <summary>
     /// Load any scenes that are pointed to by the current set of portals but are not already loaded
     /// </summary>
-    private void LoadPortalScenes()
+    IEnumerator LoadPortalScenes()
     {
+        yield return 0;
         Debug.Log("entered LoadPortalScenes()");
         //iterate through the portals in this scene and load the corresponding scenes
         foreach (PortalEntrance  entrance in lstPortalEntrances)
@@ -223,7 +224,8 @@ private SceneContainer GetSceneContainer(string strSceneName)
             bool blnAlreadyLoaded = false;
             for (int i = 0; i < SceneManager.sceneCount; i++)
             {
-                if (SceneManager.GetSceneAt(i).name.Trim().ToLower() == strTargetScene)
+                Scene scene = SceneManager.GetSceneAt(i);
+                if (scene.name.Trim().ToLower() == strTargetScene && scene.isLoaded)
                 {
                     blnAlreadyLoaded = true;
                     Debug.Log(string.Format("{0} is already loaded", strTargetScene));
